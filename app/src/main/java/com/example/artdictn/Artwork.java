@@ -9,7 +9,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Artwork implements Parcelable {
+public class Artwork  {
 
     @PrimaryKey(autoGenerate = true)
     public int local_id;
@@ -23,24 +23,17 @@ public class Artwork implements Parcelable {
     int source;
 
     @Ignore
-
     String medium_display;
     String dimensions;
     String description;
 
-
-
-
-    public Artwork() {
-
-    }
+    public Artwork() { }
 
     public Artwork(String id, String title,String image_id,int source) {
         this.id = id;
         this.title = title;
         this.image_id = image_id;
         this.source = source;
-
     }
 
     //constructor for list display
@@ -64,50 +57,5 @@ public class Artwork implements Parcelable {
         this.image_id = image_id;
         this.description = description;
         this.source = source;
-
     }
-
-    protected Artwork(Parcel in) {
-        id = in.readString();
-        title = in.readString();
-        artist_display = in.readString();
-        medium_display = in.readString();
-        dimensions = in.readString();
-        image_id = in.readString();
-        description = in.readString();
-        source = in.readInt();
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeString(title);
-        dest.writeString(artist_display);
-        dest.writeString(medium_display);
-        dest.writeString(dimensions);
-        dest.writeString(image_id);
-        dest.writeString(description);
-        dest.writeInt(source);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<Artwork> CREATOR = new Creator<Artwork>() {
-        @Override
-        public Artwork createFromParcel(Parcel in) {
-            return new Artwork(in);
-        }
-
-        @Override
-        public Artwork[] newArray(int size) {
-            return new Artwork[size];
-        }
-    };
 }

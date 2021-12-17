@@ -22,17 +22,17 @@ public class FavRadapter extends RecyclerView.Adapter<FavRadapter.viewHolder> {
     Context fav_context;
 
     interface artClickListener {
-        void artSelected(Artwork selectedArt);
+        void favArtSelected(Artwork selectedArt);
     }
 
-    public ResultAdapter.artClickListener listener;
+    public FavRadapter.artClickListener listener;
 
     public FavRadapter(ArrayList<Artwork> listOfArt, Context list_context) {
         this.listOfArt = listOfArt;
         this.fav_context = list_context;
     }
 
-    public class viewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+    public class viewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener,View.OnClickListener {
         public ImageView getImg() {
             return imgView;
         }
@@ -48,6 +48,7 @@ public class FavRadapter extends RecyclerView.Adapter<FavRadapter.viewHolder> {
             super(itemView);
             imgView = itemView.findViewById(R.id.fav_img);
             titleView = itemView.findViewById(R.id.fav_title);
+            itemView.setOnClickListener(this);
 
 
         }
@@ -55,6 +56,12 @@ public class FavRadapter extends RecyclerView.Adapter<FavRadapter.viewHolder> {
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             menu.add(Menu.NONE, R.id.delete,0,"REMOVE");
+        }
+
+        @Override
+        public void onClick(View v) {
+            Artwork artwork = listOfArt.get(getAdapterPosition());
+            listener.favArtSelected(artwork);
         }
     }
 
@@ -84,7 +91,7 @@ public class FavRadapter extends RecyclerView.Adapter<FavRadapter.viewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.artSelected(listOfArt.get(position));
+                listener.favArtSelected(listOfArt.get(position));
             }
         });
     }

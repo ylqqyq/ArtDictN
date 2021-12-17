@@ -43,15 +43,6 @@ public class DatabaseManager {
         });
     }
 
-//    public void deleteArtById(Artwork art) {
-//        databaseExecuter.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                db.getDao().deleteArtQ(art);
-//            }
-//        });
-//    }
-
     public void deleteArt(Artwork art) {
         databaseExecuter.execute(new Runnable() {
             @Override

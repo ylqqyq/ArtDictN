@@ -1,6 +1,4 @@
 package com.example.artdictn;
-
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,28 +8,25 @@ import java.util.ArrayList;
 
 public class JsonService {
     ArrayList<Artwork> fullArtList = new ArrayList<>(0);
-
     //keyword search result: a list of object with basic info from Chicago museum, only image need to be displayed
     //json structure see:jsonArtList - CHI
-    public ArrayList<Artwork> parseArtListJsonChi(String jsonThumbStr) {
-        ArrayList<Artwork> fullArtListChi = new ArrayList<>(0);
-        try {
-            JSONObject jsonObject = new JSONObject(jsonThumbStr);
-            JSONArray artArray = jsonObject.getJSONArray("data");
-            for(int i=0;i<artArray.length();i++) {
-                JSONObject thumbObj = artArray.getJSONObject(i);
-                int id = thumbObj.getInt("id");
-                String title = thumbObj.getString("title");
-                int source = 1;
-
-                //QUESTION: is it how i mark the source??
-                fullArtList.add(new Artwork(String.valueOf(id),title,source));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return fullArtListChi;
-    }
+//    public ArrayList<Artwork> parseArtListJsonChi(String jsonThumbStr) {
+//        ArrayList<Artwork> fullArtListChi = new ArrayList<>(0);
+//        try {
+//            JSONObject jsonObject = new JSONObject(jsonThumbStr);
+//            JSONArray artArray = jsonObject.getJSONArray("data");
+//            for(int i=0;i<artArray.length();i++) {
+//                JSONObject thumbObj = artArray.getJSONObject(i);
+//                int id = thumbObj.getInt("id");
+//                String title = thumbObj.getString("title");
+//                int source = 1;
+//                fullArtList.add(new Artwork(String.valueOf(id),title,source));
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return fullArtListChi;
+//    }
 
     //json structure see:jsonArtList - RIJKS
     public ArrayList<Artwork> parseArtListJsonRijks(String jsonThumbStr) {
@@ -57,8 +52,6 @@ public class JsonService {
 
 //    public ArrayList<Artwork> parseListJsonMet(String jsonSearchStr) {
 //        ArrayList<Artwork> fullArtListMet = new ArrayList<>(0);
-//
-//
 //    }
 
 //detail info for called after click one artwork, displayed on detailActivity
@@ -77,32 +70,30 @@ public class JsonService {
 //        }
 //        return imageID;
 //    }
-
-    public Artwork parseArtDetailJsonChi(String jsonArtStr) {
-        Artwork artDetailData = new Artwork();
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(jsonArtStr);
-            JSONObject detailObj = jsonObject.getJSONObject("data");
-            int id = detailObj.getInt("id");
-            String title = detailObj.getString("title");
-            String artist = detailObj.getString("artist_display");
-            String dimensions = detailObj.getString("dimensions");
-            String medium = detailObj.getString("medium_display");
-            boolean zoomable = detailObj.getBoolean("is_zoomable");
-            String image = detailObj.getString("image_id");
-            int source = 1;
-            artDetailData = new Artwork(String.valueOf(id),title,artist,medium,dimensions,image,null,source);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return artDetailData;
-    }
+//
+//    public Artwork parseArtDetailJsonChi(String jsonArtStr) {
+//        Artwork artDetailData = new Artwork();
+//        JSONObject jsonObject = null;
+//        try {
+//            jsonObject = new JSONObject(jsonArtStr);
+//            JSONObject detailObj = jsonObject.getJSONObject("data");
+//            int id = detailObj.getInt("id");
+//            String title = detailObj.getString("title");
+//            String artist = detailObj.getString("artist_display");
+//            String dimensions = detailObj.getString("dimensions");
+//            String medium = detailObj.getString("medium_display");
+//            boolean zoomable = detailObj.getBoolean("is_zoomable");
+//            String image = detailObj.getString("image_id");
+//            int source = 1;
+//            artDetailData = new Artwork(String.valueOf(id),title,artist,medium,dimensions,image,null,source);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return artDetailData;
+//    }
 
     public Artwork parseArtDetailJsonRijks(String jsonArtStr) {
         Artwork artDetailData = new Artwork();
-
-
         try {
             JSONObject jsonObject = new JSONObject(jsonArtStr);
             JSONObject detailObj = jsonObject.getJSONObject("artObject");

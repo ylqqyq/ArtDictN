@@ -20,15 +20,16 @@ import java.util.logging.LogRecord;
 
 public class NetworkingService {
 
-    String chiURL = "https://api.artic.edu/api/v1/artworks/";
-    String chiSearchURL1 = "search?q=";
-    String chiSearchURL2 = "&limit=20";
-
-    String chiImgURL1 = "https://www.artic.edu/iiif/2/";
-    String chiImgURL2 = "/full/843,/0/default.jpg";
-    String chiImgURLs = "/full/200,/0/default.jpg";
-
-    String ClevelandURL = "https://openaccess-api.clevelandart.org/api/artworks/?has_image=1&q=";
+    //TODO:add more museum APIs
+//    String chiURL = "https://api.artic.edu/api/v1/artworks/";
+//    String chiSearchURL1 = "search?q=";
+//    String chiSearchURL2 = "&limit=20";
+//
+//    String chiImgURL1 = "https://www.artic.edu/iiif/2/";
+//    String chiImgURL2 = "/full/843,/0/default.jpg";
+//    String chiImgURLs = "/full/200,/0/default.jpg";
+//
+//    String ClevelandURL = "https://openaccess-api.clevelandart.org/api/artworks/?has_image=1&q=";
 
     String rijksQURL = "https://www.rijksmuseum.nl/api/en/collection?";
     private String apiKeyR = "key=VaUtnjGb";
@@ -46,6 +47,12 @@ public class NetworkingService {
     networkingListener listener;
 
     //fetch search results
+    public void fetchAllArtListData() {
+//        String completedURLChi = chiURL+chiSearchURL1 + text + chiSearchURL2;
+        String completedURLRijks = rijksQURL+ apiKeyR + rijksSearch;
+//        connect(completedURLChi);
+        connect(completedURLRijks);
+    }
     public void fetchArtListData(String text) {
 //        String completedURLChi = chiURL+chiSearchURL1 + text + chiSearchURL2;
         String completedURLRijks = rijksQURL+ apiKeyR + rijksSearch + text;
@@ -61,61 +68,61 @@ public class NetworkingService {
     }
 
     //second call with object id to get img_id
-    public void getImgID(String id) {
-        String completedURL = chiURL + id;
-        connect(completedURL);
-    }
+//    public void getImgID(String id) {
+//        String completedURL = chiURL + id;
+//        connect(completedURL);
+//    }
 
-    public void getThumbnailImageDatafromChi(String img_id) {
-        //parse img_id from object in model
-        String completedURL = chiImgURL1 + img_id +chiImgURLs;
-        //only get the image of smaller size
-        networkingExecutor.execute((new Runnable() {
-            @Override
-            public void run() {
-                URL urlObj = null;
-                try {
-                    urlObj = new URL(completedURL);
-                    InputStream in = ((InputStream) urlObj.getContent());
-                    Bitmap imageData = BitmapFactory.decodeStream(in);
-                    networkHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            listener.APIImgListener(imageData);
-                        }
-                    });
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }));
-    }
-    public void getImageDatafromChi(String img_id) {
-        String completedURL = chiImgURL1 + img_id +chiImgURL2;
-        networkingExecutor.execute((new Runnable() {
-            @Override
-            public void run() {
-                URL urlObj = null;
-                try {
-                    urlObj = new URL(completedURL);
-                    InputStream in = ((InputStream) urlObj.getContent());
-                    Bitmap imageData = BitmapFactory.decodeStream(in);
-                    networkHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            listener.APIImgListener(imageData);
-                        }
-                    });
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }));
-    }
+//    public void getThumbnailImageDatafromChi(String img_id) {
+//        //parse img_id from object in model
+//        String completedURL = chiImgURL1 + img_id +chiImgURLs;
+//        //only get the image of smaller size
+//        networkingExecutor.execute((new Runnable() {
+//            @Override
+//            public void run() {
+//                URL urlObj = null;
+//                try {
+//                    urlObj = new URL(completedURL);
+//                    InputStream in = ((InputStream) urlObj.getContent());
+//                    Bitmap imageData = BitmapFactory.decodeStream(in);
+//                    networkHandler.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            listener.APIImgListener(imageData);
+//                        }
+//                    });
+//                } catch (MalformedURLException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }));
+//    }
+//    public void getImageDatafromChi(String img_id) {
+//        String completedURL = chiImgURL1 + img_id +chiImgURL2;
+//        networkingExecutor.execute((new Runnable() {
+//            @Override
+//            public void run() {
+//                URL urlObj = null;
+//                try {
+//                    urlObj = new URL(completedURL);
+//                    InputStream in = ((InputStream) urlObj.getContent());
+//                    Bitmap imageData = BitmapFactory.decodeStream(in);
+//                    networkHandler.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            listener.APIImgListener(imageData);
+//                        }
+//                    });
+//                } catch (MalformedURLException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }));
+//    }
     public void getImageDatafromRijks(String img_url) {
         networkingExecutor.execute((new Runnable() {
             @Override
@@ -151,7 +158,6 @@ public class NetworkingService {
                     httpURLConnection = (HttpURLConnection) urlObj.openConnection();
                     httpURLConnection.setRequestMethod("GET");
                     int status = httpURLConnection.getResponseCode();
-
                     if((status >=200) && (status <=299)) {
                         InputStream in = httpURLConnection.getInputStream();
                         InputStreamReader reader = new InputStreamReader(in);
@@ -180,5 +186,4 @@ public class NetworkingService {
             }
         });
     }
-
 }

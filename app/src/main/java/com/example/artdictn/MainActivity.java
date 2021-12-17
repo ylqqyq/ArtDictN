@@ -14,6 +14,9 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -31,7 +34,9 @@ public class MainActivity extends AppCompatActivity implements ResultAdapter.art
     FavDatabase db;
     DatabaseManager dbManager;
     Bundle savedInstanceState;
-
+    ProgressBar loading;
+    String myQuery;
+    ImageView cover_img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +46,16 @@ public class MainActivity extends AppCompatActivity implements ResultAdapter.art
         jsonService = ((myApp)getApplication()).getJsonService();
         db = DatabaseManager.getDBInstance(this);
         dbManager = ((myApp)getApplication()).getDatabaseManager();
-
+        loading=findViewById(R.id.progressBar);
+        cover_img = findViewById(R.id.cover);
+//        networkingService.fetchAllArtListData();
+//        networkingService.fetchArtListData(myQuery);
+//TODO:show last query result when come back from detail page
+//        if (savedInstanceState != null) {
+//            myQuery = savedInstanceState.getString("query");
+//            System.out.println(myQuery);
+//            networkingService.fetchArtListData(myQuery);
+//        }
         //combine two arraylist for display
 //        fullList.addAll(artListC);
 //        fullList.addAll(artListR);
@@ -56,18 +70,17 @@ public class MainActivity extends AppCompatActivity implements ResultAdapter.art
         networkingService.listener = this;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-
-    }
+//    @Override
+//    public void onSaveInstanceState(Bundle savedInstanceState) {
+//        super.onSaveInstanceState(savedInstanceState);
+//        savedInstanceState.putString("query",myQuery);
+//    }
     @Override
     protected void onResume() {
         super.onResume();
         networkingService = ( (myApp)getApplication()).getNetworkingService();
         jsonService = ( (myApp)getApplication()).getJsonService();
         networkingService.listener = this;
-
     }
 
     @Override
@@ -87,6 +100,10 @@ public class MainActivity extends AppCompatActivity implements ResultAdapter.art
             @Override
             public boolean onQueryTextSubmit(String query) {
                 networkingService.fetchArtListData(query);
+                searchView.clearFocus();
+                myQuery=query;
+                loading.setVisibility(View.VISIBLE);
+                cover_img.setVisibility(View.INVISIBLE);
                 return true;
             }
 
@@ -113,12 +130,10 @@ public class MainActivity extends AppCompatActivity implements ResultAdapter.art
 
     @Override
     public void artSelected(Artwork selectedArt) {
-//        selectedArt =new Artwork();
         Log.d("select","ArtSelected!#@######");
         Intent toDetail = new Intent(this,DetailActivity.class);
         toDetail.putExtra("selectID",selectedArt.id);
         startActivity(toDetail);
-        //should I put the object in or just id???
     }
 
     @Override
@@ -134,24 +149,13 @@ public class MainActivity extends AppCompatActivity implements ResultAdapter.art
             Toast toast = Toast.makeText(this,"No result available",Toast.LENGTH_LONG);
                    toast.setGravity(Gravity.CENTER,0,0);
             toast.show();
-
-
         }
         adapter.artList = artListR;
         adapter.notifyDataSetChanged();
-        //BIG PROBLEM: use this list of id to make a image id call?????
-//        for(int i = 0; i < artListC.size(); i++) {
-//        networkingService.getImgID(artListC.get(i).id);
-//        }
-//
-//        adapter.artList = fullList;
-
+        loading.setVisibility(View.GONE);
     }
 
     @Override
     public void APIImgListener(Bitmap image) {
-//    adapter.
     }
-
-
 }

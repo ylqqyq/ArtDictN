@@ -33,10 +33,7 @@ public class DetailActivity extends AppCompatActivity implements NetworkingServi
     ImageView imageView;
     ImageButton save_btn;
     Artwork artDetailData = new Artwork();
-    FragmentManager fm = getSupportFragmentManager();
-
     DatabaseManager dbManager;
-//    FavDatabase db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,8 +41,6 @@ public class DetailActivity extends AppCompatActivity implements NetworkingServi
 //        db = DatabaseManager.getDBInstance(this);
         dbManager = ((myApp)getApplication()).getDatabaseManager();
         String selectedID =this.getIntent().getStringExtra("selectID");
-
-
         Log.d("select","art of choice:" +artDetailData);
         title_text = findViewById(R.id.title);
         maker_text = findViewById(R.id.artist);
@@ -63,23 +58,16 @@ public class DetailActivity extends AppCompatActivity implements NetworkingServi
             @Override
             public void onClick(View v) {
                 Log.d("detail","biggggggggpicture");
-//                addFragment(artDetailData.image_id);
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(artDetailData.image_id)));
-
-                
+                //TODO:large zoomable imageview?
+//                Intent toFull = new Intent(getApplicationContext(),LargeImgActivity.class);
+//                toFull.putExtra("img_url",artDetailData.image_id);
+//                startActivity(toFull);
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(artDetailData.image_id));
+                startActivity(i);
             }
-//
         });
-
     }
-
-//    void addFragment(String img_url) {
-//        fm.findFragmentById(R.id.full_image_frag);
-//        LargeFragment frag = LargeFragment.newInstance(img_url);
-//        fm.beginTransaction().add(R.id.full_image_frag,frag).commit();
-//
-//    }
-
 
     @Override
     public void APIlistener(String jsonString) {
@@ -93,7 +81,6 @@ public class DetailActivity extends AppCompatActivity implements NetworkingServi
         } else {
         desc_text.setText("Description: "+artDetailData.description);
         }
-
         networkingService.getImageDatafromRijks(artDetailData.image_id);
     }
 
@@ -101,23 +88,11 @@ public class DetailActivity extends AppCompatActivity implements NetworkingServi
     public void APIImgListener(Bitmap image) {
         imageView.setImageBitmap(image);
     }
-//NOT YET THERE: a function to save the artwork into database
 
     public void save_item(View view) {
-
         Log.d("db","object addedddddddddddddddd");
         save_btn.setImageResource(R.drawable.outline_favorite_white_24dp);
         Toast.makeText(this,"Saved", Toast.LENGTH_SHORT).show();
         dbManager.addNewArt(artDetailData);
-
-
-
     }
-
-
-//        Intent toFull = new Intent(this,FullscreenActivity.class);
-//        toFull.putExtra("image_url",artDetailData.image_id);
-//        startActivity(toFull);
-
-
     }

@@ -11,7 +11,6 @@ public final class MyGlideModule extends AppGlideModule {
     @Override
     public void applyOptions(Context c, GlideBuilder builder) {
         builder.setDefaultRequestOptions(new RequestOptions().format(DecodeFormat.PREFER_ARGB_8888));
-
     }
 }
 

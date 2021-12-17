@@ -30,9 +30,6 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.myViewHold
         this.artList = artList;
     }
 
-//        public ImageView imgView;
-
-
     interface artClickListener {
         void artSelected(Artwork selectedArt);
     }
@@ -40,16 +37,15 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.myViewHold
     public artClickListener listener;
 
     public class myViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public final TextView txtView;
-        public final ImageView imgView;
-//        private final TextView txtView;
-//        private final ImageView imgView;
-//        public TextView getTxtView() {
-//            return txtView;
-//        }
-//        public ImageView getImgView() {
-//            return imgView;
-//        }
+
+        private final TextView txtView;
+        private final ImageView imgView;
+        public TextView getTxtView() {
+            return txtView;
+        }
+        public ImageView getImgView() {
+            return imgView;
+        }
 
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -74,37 +70,17 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.myViewHold
 
     @Override
     public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
-        holder.txtView.setText(artList.get(position).title);
-//        FutureTarget<Bitmap> futureTarget =
-//                Glide.with(c)
-//                        .asBitmap()
-//                        .centerCrop()
-//                        .load(artList.get(position).image_id)
-//                        .submit(140, 140);
-//        try {
-//            Bitmap bitmap = futureTarget.get();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        Glide.with(c)
-//                .clear(futureTarget);
-
+        holder.getTxtView().setText(artList.get(position).title);
         Glide.with(c)
                 .load(artList.get(position).image_id)
-//                .override(140,140)
                 .centerCrop()
-                .into(holder.imgView);
+                .into(holder.getImgView());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.artSelected(artList.get(position));
             }
         });
-
-//        networkingService.getThumbnailImageData(art.image_id);
-//        holder.imgView.setImageBitmap(networkingService.getThumbnailImageData(art.image_id));
     }
 
     @Override

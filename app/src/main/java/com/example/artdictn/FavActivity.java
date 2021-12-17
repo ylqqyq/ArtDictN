@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -29,15 +30,11 @@ public class FavActivity extends AppCompatActivity implements
 
     ArrayList<Artwork> favDBList;
     DatabaseManager dbManager;
-//    FragmentManager fm = new
-
     RecyclerView recyclerView;
     FavRadapter rAdapter;
     NetworkingService networkingService;
     JsonService jsonService;
     AlertDialog.Builder warning;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +45,11 @@ public class FavActivity extends AppCompatActivity implements
         networkingService = ((myApp)getApplication()).getNetworkingService();
         jsonService=((myApp)getApplication()).getJsonService();
 
-
         dbManager =((myApp)getApplication()).getDatabaseManager();
         dbManager.listener = this;
         dbManager.getAllArt();
 
-
-
+        warning = new AlertDialog.Builder(this);
     }
 
     @Override
@@ -63,7 +58,7 @@ public class FavActivity extends AppCompatActivity implements
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         rAdapter = new FavRadapter(favDBList,this);
         recyclerView.setAdapter(rAdapter);
-
+        rAdapter.listener=this;
     }
 
     @Override
@@ -72,58 +67,57 @@ public class FavActivity extends AppCompatActivity implements
         inflater.inflate(R.menu.fav_menu, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
-            case R.id.remove_all:
+            case R.id.remove_all: {
                 showAlert();
-
                 break;
+            }
         }
         return true;
     }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.context_menu, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-        switch (item.getItemId()) {
-            case R.id.delete:
+//TODO: delete individual saved work with context menu
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v,
+//                                    ContextMenu.ContextMenuInfo menuInfo) {
+//        super.onCreateContextMenu(menu, v, menuInfo);
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.context_menu, menu);
+//    }
+//
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+//        switch (item.getItemId()) {
+//            case R.id.delete:
+////                dbManager.deleteArt(favDBList.get(info.position));
 //                dbManager.deleteArt(favDBList.get(info.position));
-                dbManager.deleteArt(favDBList.get(info.position));
-                rAdapter.notifyDataSetChanged();
-                break;
-
-        }
-        return super.onContextItemSelected(item);
-    }
+//                rAdapter.notifyDataSetChanged();
+//                break;
+//        }
+//        return super.onContextItemSelected(item);
+//    }
 
     @Override
     public void APIlistener(String jsonString) {
-
     }
 
     @Override
     public void APIImgListener(Bitmap image) {
-
-
     }
 
     @Override
-    public void artSelected(Artwork selectedArt) {
-        Intent toFull = new Intent(this,FullimgActivity.class);
-        toFull.putExtra("img_url",selectedArt.image_id);
-        startActivity(toFull);
-
+    public void favArtSelected(Artwork selectedArt) {
+//        TODO:Fullscreen activity???
+//         Intent toFull = new Intent(this,FullimgActivity.class);
+//        toFull.putExtra("img_url",selectedArt.image_id);
+//        startActivity(toFull);
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(selectedArt.image_id));
+        startActivity(i);
     }
 
     private void showAlert(){
@@ -133,9 +127,11 @@ public class FavActivity extends AppCompatActivity implements
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dbManager.deleteAll();
-
+                Intent backHome= new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(backHome);
             }
         });
         warning.setCancelable(true);
+        warning.show();
     }
 }
