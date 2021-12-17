@@ -32,7 +32,7 @@ public class NetworkingService {
 
     String rijksQURL = "https://www.rijksmuseum.nl/api/en/collection?";
     private String apiKeyR = "key=VaUtnjGb";
-    String rijksSearch = "&imgonly=true&ps=3&what=";
+    String rijksSearch = "&imgonly=true&ps=10&what=";
     String rijksDetailURL = "https://www.rijksmuseum.nl/api/en/collection/";
 
     public static final ExecutorService networkingExecutor = Executors.newFixedThreadPool(4);

@@ -15,6 +15,12 @@
         android:theme="@style/Theme.ArtDictN"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".FullimgActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:label="@string/title_activity_fullimg"
+            android:theme="@style/Theme.ArtDictN.Fullscreen" />
+        <activity
             android:name=".FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"

@@ -10,10 +10,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -28,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements ResultAdapter.art
     RecyclerView recyclerView;
     FavDatabase db;
     DatabaseManager dbManager;
+    Bundle savedInstanceState;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +47,27 @@ public class MainActivity extends AppCompatActivity implements ResultAdapter.art
 //        fullList.addAll(artListR);
 
         recyclerView = findViewById(R.id.resultGrid);
-        int numberOfColumns = 3;
+        int numberOfColumns = 2;
         recyclerView.setLayoutManager(new GridLayoutManager(this,numberOfColumns));
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ResultAdapter(this,artListR);
         recyclerView.setAdapter(adapter);
         adapter.listener=this;
         networkingService.listener = this;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        networkingService = ( (myApp)getApplication()).getNetworkingService();
+        jsonService = ( (myApp)getApplication()).getJsonService();
+        networkingService.listener = this;
+
     }
 
     @Override
@@ -111,6 +129,14 @@ public class MainActivity extends AppCompatActivity implements ResultAdapter.art
             networkingService.getImageDatafromRijks(artListR.get(i).image_id);
         }
         System.out.println("Size:"+artListR.size());
+        //if no result is found
+        if (artListR.size() == 0) {
+            Toast toast = Toast.makeText(this,"No result available",Toast.LENGTH_LONG);
+                   toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+
+
+        }
         adapter.artList = artListR;
         adapter.notifyDataSetChanged();
         //BIG PROBLEM: use this list of id to make a image id call?????
@@ -124,6 +150,8 @@ public class MainActivity extends AppCompatActivity implements ResultAdapter.art
 
     @Override
     public void APIImgListener(Bitmap image) {
-    adapter.
+//    adapter.
     }
+
+
 }

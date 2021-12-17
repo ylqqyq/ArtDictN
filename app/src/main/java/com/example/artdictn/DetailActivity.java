@@ -2,13 +2,18 @@ package com.example.artdictn;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -54,17 +59,40 @@ public class DetailActivity extends AppCompatActivity implements NetworkingServi
         networkingService.listener = this;
         networkingService.fetchDetailData(selectedID);
 
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("detail","biggggggggpicture");
+//                addFragment(artDetailData.image_id);
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(artDetailData.image_id)));
+
+                
+            }
+//
+        });
 
     }
+
+//    void addFragment(String img_url) {
+//        fm.findFragmentById(R.id.full_image_frag);
+//        LargeFragment frag = LargeFragment.newInstance(img_url);
+//        fm.beginTransaction().add(R.id.full_image_frag,frag).commit();
+//
+//    }
+
 
     @Override
     public void APIlistener(String jsonString) {
         artDetailData = jsonService.parseArtDetailJsonRijks(jsonString);
         title_text.setText(artDetailData.title);
         maker_text.setText(artDetailData.artist_display);
-        medium_text.setText(artDetailData.medium_display);
-        dimension_text.setText(artDetailData.dimensions);
-        desc_text.setText(artDetailData.description);
+        medium_text.setText("Medium: "+artDetailData.medium_display);
+        dimension_text.setText("Dimensions: "+artDetailData.dimensions);
+        if (artDetailData.description == null) {
+            desc_text.setText("Description: Not available");
+        } else {
+        desc_text.setText("Description: "+artDetailData.description);
+        }
 
         networkingService.getImageDatafromRijks(artDetailData.image_id);
     }
@@ -78,6 +106,7 @@ public class DetailActivity extends AppCompatActivity implements NetworkingServi
     public void save_item(View view) {
 
         Log.d("db","object addedddddddddddddddd");
+        save_btn.setImageResource(R.drawable.outline_favorite_white_24dp);
         Toast.makeText(this,"Saved", Toast.LENGTH_SHORT).show();
         dbManager.addNewArt(artDetailData);
 
@@ -85,11 +114,10 @@ public class DetailActivity extends AppCompatActivity implements NetworkingServi
 
     }
 
-    public void full_image(View view) {
+
 //        Intent toFull = new Intent(this,FullscreenActivity.class);
 //        toFull.putExtra("image_url",artDetailData.image_id);
 //        startActivity(toFull);
-        FullscreenFragment ff = new FullscreenFragment();
-        fm.beginTransaction().add(R.id.fullscreen_content,ff).commit();
+
+
     }
-}

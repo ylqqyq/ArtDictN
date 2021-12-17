@@ -30,7 +30,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.myViewHold
         this.artList = artList;
     }
 
-        public ImageView imgView;
+//        public ImageView imgView;
 
 
     interface artClickListener {
@@ -41,7 +41,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.myViewHold
 
     public class myViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public final TextView txtView;
-//        public final ImageView imgView;
+        public final ImageView imgView;
 //        private final TextView txtView;
 //        private final ImageView imgView;
 //        public TextView getTxtView() {
@@ -91,11 +91,11 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.myViewHold
 //        Glide.with(c)
 //                .clear(futureTarget);
 
-//        Glide.with(c)
-//                .load(artList.get(position).image_id)
+        Glide.with(c)
+                .load(artList.get(position).image_id)
 //                .override(140,140)
-//                .centerCrop()
-//                .into(holder.imgView);
+                .centerCrop()
+                .into(holder.imgView);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

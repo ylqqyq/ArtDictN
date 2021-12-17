@@ -18,4 +18,10 @@ public interface DAO {
 
     @Delete
     void deleteArt(Artwork artDelete);
+
+    @Query("DELETE FROM Artwork")
+    public void delete();
+
+//    @Query("DELETE FROM Artwork")
+//    abstract void deleteArtQ(Artwork toDelete);
 }
